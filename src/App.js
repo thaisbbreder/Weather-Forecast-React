@@ -24,9 +24,7 @@ function App() {
   return (
     <Grid container direction="row" spacing={4}>
       <Grid item xs={8} style={{}}>
-        {/*       
-        <Typography>{weatherForecast.current.temp_c}</Typography>
-         */}
+        {/*<Typography>{weatherForecast.current.temp_c}</Typography>*/}
         {weatherForecast ? (
           <img src={weatherForecast.current.condition.icon} />
         ) : null}
