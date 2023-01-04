@@ -2,12 +2,10 @@ import {
   Box,
   Divider,
   FormControl,
+  FormControlLabel,
   Grid,
   IconButton,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
   Stack,
   Switch,
   TextField,
@@ -16,7 +14,16 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import animationData from "./assets/animation.json";
+import { LocationOn } from "@mui/icons-material";
+import ThermostatIcon from "@mui/icons-material/Thermostat";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AirIcon from "@mui/icons-material/Air";
+import OpacityIcon from "@mui/icons-material/Opacity";
+import NotesIcon from "@mui/icons-material/Notes";
 
+console.log(animationData);
 function App() {
   const [currentPosition, setCurrentPosition] = useState("");
   const [weatherForecast, setWeatherForecast] = useState();
@@ -72,9 +79,9 @@ function App() {
       direction="row"
       spacing={1}
       style={{
-        background:
-          "linear-gradient(125deg, #eac5ff 0, #c7afff 25%, #a598f9 50%, #8681d4 75%, #6a6cb2 100%)",
+        background: "linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4)",
         height: "100vh",
+        color: "white",
       }}
     >
       {weatherForecast ? (
@@ -82,7 +89,7 @@ function App() {
           <Grid item xs={7}>
             <Box
               style={{
-                padding: "40px",
+                padding: "80px",
                 margin: "0px 40px 0 40px",
               }}
             >
@@ -102,21 +109,27 @@ function App() {
                 </Typography>
               )}
               <Typography style={{ fontSize: "25px", marginBottom: "10px" }}>
-                {moment().format("Do MMMM YY")}
+                {moment().format("Do MMMM YYYY")}
               </Typography>
               <Typography style={{ marginBottom: "10px" }}>
                 {moment().format("dddd LT")}
               </Typography>
 
-              <Typography> {weatherForecast.current.condition.text}</Typography>
+              <Typography>
+                {" "}
+                <NotesIcon />
+                {weatherForecast.current.condition.text}
+              </Typography>
 
               {celsius ? (
                 <Typography>
+                  <ThermostatIcon />
                   Feels like {weatherForecast.current.feelslike_c}
                   {"º"}
                 </Typography>
               ) : (
                 <Typography>
+                  <ThermostatIcon />
                   Feels like {weatherForecast.current.feelslike_f}
                   {"º"}
                 </Typography>
@@ -128,158 +141,59 @@ function App() {
               >
                 {celsius ? (
                   <Typography>
-                    Max. temp.:{" "}
+                    <ExpandLessIcon />
+                    {"High: "}
                     {weatherForecast.forecast.forecastday[0].day.maxtemp_c}{" "}
                   </Typography>
                 ) : (
                   <Typography>
-                    Max. temp.:{" "}
+                    <ExpandLessIcon />
+                    {"High: "}
                     {weatherForecast.forecast.forecastday[0].day.maxtemp_f}{" "}
                   </Typography>
                 )}
                 {celsius ? (
                   <Typography>
-                    Min. temp.:{" "}
+                    <ExpandMoreIcon />
+                    {"Low: "}
                     {weatherForecast.forecast.forecastday[0].day.mintemp_c}{" "}
                   </Typography>
                 ) : (
                   <Typography>
-                    Min. temp.:{" "}
+                    <ExpandMoreIcon />
+                    {"Low: "}
                     {weatherForecast.forecast.forecastday[0].day.mintemp_f}{" "}
                   </Typography>
                 )}
                 <Typography>
+                  <OpacityIcon />
                   Humidity: {weatherForecast.current.humidity}{" "}
                 </Typography>
                 <Typography>
-                  Precipitation: {weatherForecast.current.precip_in}{" "}
-                </Typography>
-                <Typography>
+                  <AirIcon />
                   Wind: {weatherForecast.current.precip_in}{" "}
                 </Typography>{" "}
-              </Stack>
-
-              <Typography
-                style={{
-                  fontWeight: "bold",
-                  marginTop: "40px",
-                  padding: "10px",
-                }}
-              >
-                Previsão do tempo semanal
-              </Typography>
-              <Stack
-                direction="row"
-                divider={<Divider orientation="vertical" flexItem />}
-                spacing={0}
-              >
-                <Paper
-                  style={{
-                    margin: "5px 5px",
-                    padding: "20px",
-                    backgroundColor: "rgba(255,255,255,0.5)",
-                  }}
-                >
-                  <Typography>
-                    {"Data: "}
-                    {weatherForecast.forecast.forecastday[1].date}
-                  </Typography>
-
-                  <img
-                    src={
-                      weatherForecast.forecast.forecastday[1].day.condition.icon
-                    }
-                  />
-                  {celsius ? (
-                    <Typography>
-                      {" Temp. min: "}
-                      {weatherForecast.forecast.forecastday[1].day.mintemp_c}
-                      {"º"}
-                    </Typography>
-                  ) : (
-                    <Typography>
-                      {" Temp. min: "}
-                      {weatherForecast.forecast.forecastday[1].day.mintemp_f}
-                      {"º"}
-                    </Typography>
-                  )}
-                  {celsius ? (
-                    <Typography>
-                      {"Temp. máx: "}
-                      {weatherForecast.forecast.forecastday[1].day.maxtemp_c}
-                      {"º"}
-                    </Typography>
-                  ) : (
-                    <Typography>
-                      {"Temp. máx: "}
-                      {weatherForecast.forecast.forecastday[1].day.maxtemp_f}
-                      {"º"}
-                    </Typography>
-                  )}
-                </Paper>
-
-                <Paper
-                  style={{
-                    margin: "5px 5px",
-                    padding: "20px",
-                    backgroundColor: "rgba(255,255,255,0.5)",
-                  }}
-                >
-                  <Typography>
-                    {" Data: "}
-                    {weatherForecast.forecast.forecastday[2].date}
-                  </Typography>
-                  <img
-                    src={
-                      weatherForecast.forecast.forecastday[2].day.condition.icon
-                    }
-                  />
-
-                  {celsius ? (
-                    <Typography>
-                      {" Temp. min: "}
-                      {weatherForecast.forecast.forecastday[2].day.mintemp_c}
-                      {"º"}
-                    </Typography>
-                  ) : (
-                    <Typography>
-                      {" Temp. min: "}
-                      {weatherForecast.forecast.forecastday[2].day.mintemp_f}
-                      {"º"}
-                    </Typography>
-                  )}
-                  {celsius ? (
-                    <Typography>
-                      {"Temp. máx: "}
-                      {weatherForecast.forecast.forecastday[2].day.maxtemp_c}
-                      {"º"}
-                    </Typography>
-                  ) : (
-                    <Typography>
-                      {"Temp. máx: "}
-                      {weatherForecast.forecast.forecastday[2].day.maxtemp_f}
-                      {"º"}
-                    </Typography>
-                  )}
-                </Paper>
               </Stack>
             </Box>
           </Grid>
           <Grid item xs={1}>
-            <Switch
-              defaultChecked
-              color="default"
-              label="F"
-              onClick={conversion}
-            />
+            <Stack direction="row" alignItems="center">
+              <Typography>ºC</Typography>
+              <Switch
+                color="default"
+                style={{ "aria-label": "ant design" }}
+                onClick={conversion}
+              />
+              <Typography>ºF</Typography>
+            </Stack>
           </Grid>
 
           <Grid item xs={4}>
             <Paper
               style={{
                 padding: "40px",
-                backgroundColor: "rgba(255,255,255,0.5)",
-
+                backgroundColor: "rgba(255,255,255,0.2)",
+                color: "white",
                 height: "100vh",
               }}
             >
@@ -290,6 +204,7 @@ function App() {
                   marginBottom: "5px",
                 }}
               >
+                <LocationOn />
                 {weatherForecast.location.name},{" "}
                 {weatherForecast.location.region}
               </Typography>
@@ -298,6 +213,7 @@ function App() {
                 id="standard-basic"
                 variant="standard"
                 value={city}
+                style={{ width: "80%", padding: "10px" }}
                 onChange={(e) => setCity(e.target.value)}
               />
               <IconButton aria-label="searchCity" onClick={searchCity}>
@@ -309,26 +225,125 @@ function App() {
                 {weatherForecast.forecast.forecastday[0].astro.moon_phase}
               </Typography>
               <Typography>
-                {"Moonrise: "}
-                {weatherForecast.forecast.forecastday[0].astro.moonrise}
-                <Typography>
-                  {"Moonset: "}
-                  {weatherForecast.forecast.forecastday[0].astro.moonset}
-                </Typography>
-                <Typography>
-                  {"Sunrise: "}
-                  {weatherForecast.forecast.forecastday[0].astro.sunrise}
-                </Typography>
-                <Typography>
-                  {"Sunset: "}
-                  {weatherForecast.forecast.forecastday[0].astro.sunset}
-                </Typography>
+                {"Sunrise: "}
+                {weatherForecast.forecast.forecastday[0].astro.sunrise}
               </Typography>
+              <Typography>
+                {"Sunset: "}
+                {weatherForecast.forecast.forecastday[0].astro.sunset}
+              </Typography>
+              <Stack
+                direction="row"
+                divider={<Divider orientation="vertical" flexItem />}
+                spacing={1}
+                marginTop={5}
+              >
+                <Typography
+                  style={{
+                    fontWeight: "bold",
+                    padding: "5px",
+                    margin: "auto",
+                    textAlign: "center",
+                    fontSize: "20px",
+                  }}
+                >
+                  Next <br />
+                  days
+                </Typography>
+
+                <Paper
+                  style={{
+                    padding: "30px",
+                    backgroundColor: "rgba(255,255,255,0.5)",
+                  }}
+                >
+                  <Typography>
+                    {"  "}
+                    {weatherForecast.forecast.forecastday[1].date}
+                  </Typography>
+
+                  <img
+                    src={
+                      weatherForecast.forecast.forecastday[1].day.condition.icon
+                    }
+                  />
+                  {celsius ? (
+                    <Typography>
+                      {"High: "}
+                      {weatherForecast.forecast.forecastday[1].day.maxtemp_c}
+                      {"º"}
+                    </Typography>
+                  ) : (
+                    <Typography>
+                      {"High: "}
+                      {weatherForecast.forecast.forecastday[1].day.maxtemp_f}
+                      {"º"}
+                    </Typography>
+                  )}
+                  {celsius ? (
+                    <Typography>
+                      {"Low: "}
+                      {weatherForecast.forecast.forecastday[1].day.mintemp_c}
+                      {"º"}
+                    </Typography>
+                  ) : (
+                    <Typography>
+                      {"Low: "}
+                      {weatherForecast.forecast.forecastday[1].day.mintemp_f}
+                      {"º"}
+                    </Typography>
+                  )}
+                </Paper>
+
+                <Paper
+                  style={{
+                    padding: "30px",
+                    backgroundColor: "rgba(255,255,255,0.5)",
+                  }}
+                >
+                  <Typography>
+                    {""}
+                    {weatherForecast.forecast.forecastday[2].date}
+                  </Typography>
+                  <img
+                    src={
+                      weatherForecast.forecast.forecastday[2].day.condition.icon
+                    }
+                  />
+                  {celsius ? (
+                    <Typography>
+                      {"High: "}
+                      {weatherForecast.forecast.forecastday[2].day.maxtemp_c}
+                      {"º"}
+                    </Typography>
+                  ) : (
+                    <Typography>
+                      {"High: "}
+                      {weatherForecast.forecast.forecastday[2].day.maxtemp_f}
+                      {"º"}
+                    </Typography>
+                  )}
+                  {celsius ? (
+                    <Typography>
+                      {"Low: "}
+                      {weatherForecast.forecast.forecastday[2].day.mintemp_c}
+                      {"º"}
+                    </Typography>
+                  ) : (
+                    <Typography>
+                      {"Low: "}
+                      {weatherForecast.forecast.forecastday[2].day.mintemp_f}
+                      {"º"}
+                    </Typography>
+                  )}
+                </Paper>
+              </Stack>
             </Paper>
           </Grid>
         </>
       ) : (
         <Grid style={{ margin: "auto" }}>
+          <Typography> Colocar uma animação aqui </Typography>
           <TextField
             id="standard-basic"
             variant="outlined"
@@ -336,18 +351,6 @@ function App() {
             value={currentPosition}
             onChange={(e) => setCurrentPosition(e.target.value)}
           />
-          <IconButton aria-label="searchCity" onClick={searchCity}>
-            <SearchIcon />
-          </IconButton>
-
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
-            <Select labelId="demo-simple-select-label" id="demo-simple-select">
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
         </Grid>
       )}
     </Grid>
