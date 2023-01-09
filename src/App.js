@@ -1,6 +1,7 @@
 import {
   Box,
   Container,
+  Divider,
   Drawer,
   Grid,
   IconButton,
@@ -14,19 +15,23 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import animationData from "./assets/animation.json";
 import NotesIcon from "@mui/icons-material/Notes";
+import AirIcon from "@mui/icons-material/Air";
+import GradeIcon from "@mui/icons-material/Grade";
+import OpacityIcon from "@mui/icons-material/Opacity";
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Carousel from "react-bootstrap/Carousel";
 import { CarouselItem } from "react-bootstrap";
+import moment from "moment/moment";
 
 console.log(animationData);
 function App() {
-  const [currentPosition, setCurrentPosition] = useState("");
-  const [weatherForecast, setWeatherForecast] = useState();
+  const [currentPosition, setCurrentPosition] = useState(""); //lat, long
+  const [weatherForecast, setWeatherForecast] = useState("");
   const [city, setCity] = useState("");
   const [celsius, setCelsius] = useState(true);
-  const [cold, setCold] = useState(true);
   const [menu, setMenu] = useState(false);
+  const [favorite, setFavorite] = useState([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((location) => {
@@ -83,13 +88,39 @@ function App() {
     setCelsius(!celsius);
   };
 
+  const addFavoriteCity = () => {
+    const favoriteList = [...favorite];
+    const addCity = {
+      id: favorite.length + 1,
+      nome: weatherForecast.location.name,
+      weather: weatherForecast.current.temp_c,
+    };
+    favoriteList.push(addCity);
+    setFavorite(favoriteList);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("saveFavoriteCity", JSON.stringify(favorite));
+  }, [favorite]);
+
+  //corrigir
+  useEffect(() => {
+    const saveFavoriteCity = JSON.parse(
+      localStorage.getItem("saveFavoriteCity")
+    );
+    if (saveFavoriteCity) {
+      setFavorite(saveFavoriteCity);
+      console.log(favorite);
+    }
+  }, []);
+
   return (
     <Grid
       container
       direction="row"
       spacing={1}
       style={{
-        background: "linear-gradient(to right, #4b6cb7, #182848)",
+        background: "white",
         height: "100vh",
         color: "white",
       }}
@@ -99,9 +130,9 @@ function App() {
           container
           style={{
             background:
-              weatherForecast.current.feelslike_c > 28
-                ? "linear-gradient(to bottom, #659999, #f4791f)"
-                : "linear-gradient(to right, #4b6cb7, #182848)",
+              weatherForecast.current.feelslike_c > 27
+                ? "linear-gradient(180deg, rgba(173, 114, 45, 0.78) 0%, rgba(122, 82, 5, 0.78) 70.67%)"
+                : "linear-gradient(180deg, rgba(28, 60, 79, 0.78) 0%, rgba(0, 29, 50, 0.78) 97.61%)",
             color: "white",
           }}
         >
@@ -109,11 +140,8 @@ function App() {
             <Grid item xs={2}>
               {["left"].map((anchor) => (
                 <React.Fragment key={anchor}>
-                  <IconButton>
-                    <NotesIcon
-                      style={{ margin: "20px" }}
-                      onClick={toggleDrawer(anchor, true)}
-                    />
+                  <IconButton onClick={toggleDrawer(anchor, true)}>
+                    <NotesIcon style={{ margin: "20px" }} />
                   </IconButton>
                   <Drawer
                     anchor={anchor}
@@ -121,12 +149,6 @@ function App() {
                     onClose={toggleDrawer(anchor, false)}
                   >
                     <Box role="presentation">
-                      {/*   <IconButton>
-                          <NotesIcon
-                            style={{ margin: "20px",}}
-                            onClick={toggleDrawer(anchor, false)}
-                          />
-                        </IconButton> */}
                       <TextField
                         id="standard-basic"
                         variant="standard"
@@ -145,114 +167,66 @@ function App() {
                         <SearchIcon />
                       </IconButton>
 
-                      <Paper
-                        elevation={4}
-                        style={{
-                          margin: "10px ",
-                          padding: "20px",
-                          backgroundColor: "rgba(255,255,255,0.5)",
-                        }}
-                      >
-                        <Typography
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "15px",
-                          }}
-                        >
-                          {weatherForecast.location.name},{" "}
-                          {weatherForecast.location.region}
-                        </Typography>
-                        {celsius ? (
-                          <Typography
-                            style={{ fontSize: "35px", textAlign: "end" }}
+                      {favorite.map((favorite, index) => {
+                        return (
+                          <Paper
+                            key={index}
+                            elevation={4}
+                            style={{
+                              margin: "10px ",
+                              padding: "20px",
+                              backgroundColor: "rgba(255,255,255,0.5)",
+                            }}
                           >
-                            {weatherForecast.current.temp_c}
-                            {"º"}
-                          </Typography>
-                        ) : (
-                          <Typography
-                            style={{ fontSize: "35px", textAlign: "end" }}
-                          >
-                            {weatherForecast.current.temp_f}
-                            {"º"}
-                          </Typography>
-                        )}
-                      </Paper>
+                            <Typography> {favorite.nome} </Typography>
+                            <Typography> {favorite.weather} </Typography>
+                          </Paper>
+                        );
+                      })}
                     </Box>
                   </Drawer>
                 </React.Fragment>
               ))}
-
-              {/*   <Grid item xs={3}>
-           <Typography style={{ marginTop: "10px" }}>
-                  {"Moon phase: "}
-                  {weatherForecast.forecast.forecastday[0].astro.moon_phase}
-                </Typography>
-                <Typography>
-                  {"Sunrise: "}
-                  {weatherForecast.forecast.forecastday[0].astro.sunrise}
-                </Typography>
-                <Typography>
-                  {"Sunset: "}
-                  {weatherForecast.forecast.forecastday[0].astro.sunset}
-                </Typography>
-                <Stack
-                  direction="row"
-                  divider={<Divider orientation="vertical" flexItem />}
-                  spacing={1}
-                  marginTop={5}
-                > 
-
-             
-
-                          <img src={forecastday.day.condition.icon} />
-          
-            </Grid> */}
             </Grid>
             <Grid item xs={8}>
               <Container style={{ padding: "40px", textAlign: "center" }}>
                 <Typography
                   style={{
-                    fontWeight: "bold",
-                    fontSize: "15px",
+                    fontSize: "25px",
                   }}
                 >
-                  {weatherForecast.location.name},{" "}
-                  {weatherForecast.location.region}
+                  {weatherForecast.location.name}
                 </Typography>
 
-                {/*  <img
-                  src={weatherForecast.current.condition.icon}
-                /> */}
                 {celsius ? (
-                  <Typography style={{ fontSize: "80px" }}>
+                  <Typography style={{ fontSize: "60px" }}>
                     {weatherForecast.current.temp_c}
                     {"ºC"}
                   </Typography>
                 ) : (
-                  <Typography style={{ fontSize: "80px" }}>
+                  <Typography style={{ fontSize: "60px" }}>
                     {weatherForecast.current.temp_f}
                     {"ºF"}
                   </Typography>
                 )}
-                <Typography>
-                  {weatherForecast.current.condition.text}
-                </Typography>
 
                 {celsius ? (
                   <Typography>
+                    {weatherForecast.current.condition.text} <br />
                     Feels like {weatherForecast.current.feelslike_c}
                     {"º"}
                   </Typography>
                 ) : (
                   <Typography>
+                    {weatherForecast.current.condition.text}
+                    <br />
                     Feels like {weatherForecast.current.feelslike_f}
                     {"º"}
                   </Typography>
                 )}
 
                 {celsius ? (
-                  <Typography>
+                  <Typography style={{ fontSize: "13px" }}>
                     {"High: "}
                     {weatherForecast.forecast.forecastday[0].day.maxtemp_c}
                     {"º    "}
@@ -261,7 +235,7 @@ function App() {
                     {"º"}
                   </Typography>
                 ) : (
-                  <Typography>
+                  <Typography style={{ fontSize: "13px" }}>
                     {"High: "}
                     {weatherForecast.forecast.forecastday[0].day.maxtemp_f}
                     {"º    "}
@@ -271,23 +245,28 @@ function App() {
                   </Typography>
                 )}
 
-          
-                <Paper style={{ backgroundColor: "rgba(255,255,255,0.5)" , marginTop:"30px", }}>
-                  <Carousel
-                    keyboard={true}
-                    centerMode={true}
-                    touch={true}
-                    swipeable={true}
-                  >
+                <Paper
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.5)",
+                    marginTop: "30px",
+                  }}
+                >
+                  <Carousel>
                     <CarouselItem interval={100000}>
                       <Stack direction="row">
                         {weatherForecast.forecast.forecastday[0].hour
                           .slice(0, 8)
                           .map((forecasthour) => (
-                            <Box style={{ margin:"10px 0 40px 0 ",}}>
-                              <Typography style={{fontSize:"15px" }}> {forecasthour.time}</Typography>
+                            <Box style={{ margin: "10px 0 40px 0 " }}>
+                              <Typography style={{ fontSize: "15px" }}>
+                                {" "}
+                                {forecasthour.time}
+                              </Typography>
 
-                              <img src={forecasthour.condition.icon} style={{ width:'30%'}}/>
+                              <img
+                                src={forecasthour.condition.icon}
+                                style={{ width: "30%" }}
+                              />
                               {celsius ? (
                                 <Typography>
                                   {forecasthour.temp_c}
@@ -305,10 +284,16 @@ function App() {
                         {weatherForecast.forecast.forecastday[0].hour
                           .slice(8, 16)
                           .map((forecasthour) => (
-                            <Box style={{ margin:"10px 0 40px 0 ",}}>
-                              <Typography style={{fontSize:"15px" }}> {forecasthour.time}</Typography>
+                            <Box style={{ margin: "10px 0 40px 0 " }}>
+                              <Typography style={{ fontSize: "15px" }}>
+                                {" "}
+                                {forecasthour.time}
+                              </Typography>
 
-                              <img src={forecasthour.condition.icon} style={{ width:'30%'}}/>
+                              <img
+                                src={forecasthour.condition.icon}
+                                style={{ width: "30%" }}
+                              />
                               {celsius ? (
                                 <Typography>
                                   {forecasthour.temp_c}
@@ -324,12 +309,18 @@ function App() {
                     <CarouselItem interval={100000}>
                       <Stack direction="row">
                         {weatherForecast.forecast.forecastday[0].hour
-                          .slice(16,24)
+                          .slice(16, 24)
                           .map((forecasthour) => (
-                            <Box style={{ margin:"10px 0 40px 0 ",}}>
-                              <Typography style={{fontSize:"15px" }}> {forecasthour.time}</Typography>
+                            <Box style={{ margin: "10px 0 40px 0 " }}>
+                              <Typography style={{ fontSize: "15px" }}>
+                                {" "}
+                                {forecasthour.time}
+                              </Typography>
 
-                              <img src={forecasthour.condition.icon} style={{ width:'30%'}}/>
+                              <img
+                                src={forecasthour.condition.icon}
+                                style={{ width: "30%" }}
+                              />
                               {celsius ? (
                                 <Typography>
                                   {forecasthour.temp_c}
@@ -345,83 +336,91 @@ function App() {
                   </Carousel>
                 </Paper>
 
-                {weatherForecast.forecast.forecastday.map(
-                  (forecastday, index) => {
-                    if (index == 0) return;
-                    return (
-                      <Paper
-                        style={{
-                          //padding: "5px",
-                          width: "50%",
-                          margin: "5px",
-                          backgroundColor: "rgba(255,255,255,0.5)",
-                        }}
-                      >
-                        {celsius ? (
-                          <Typography>
-                            {forecastday.date}
+                {weatherForecast.forecast.forecastday.map((forecastday, id) => {
+                  if (id == 0) return;
+                  return (
+                    <Paper
+                      style={{
+                        //padding: "5px",
+                        width: "50%",
+                        margin: "5px 0",
+                        backgroundColor: "rgba(255,255,255,0.5)",
+                      }}
+                    >
+                      {celsius ? (
+                        <Typography>
+                          {forecastday.date}
 
-                            <img
-                              src={forecastday.day.condition.icon}
-                              style={{
-                                //padding: "5px",
-                                maxWidth: "40px",
-                              }}
-                            />
+                          <img
+                            src={forecastday.day.condition.icon}
+                            style={{
+                              //padding: "5px",
+                              maxWidth: "40px",
+                            }}
+                          />
 
-                            {"High: "}
-                            {forecastday.day.maxtemp_c}
-                            {"º"}
+                          {"High: "}
+                          {forecastday.day.maxtemp_c}
+                          {"º"}
 
-                            {"Low: "}
-                            {forecastday.day.mintemp_c}
-                            {"º"}
-                          </Typography>
-                        ) : (
-                          <Typography>
-                            {forecastday.date}
+                          {"Low: "}
+                          {forecastday.day.mintemp_c}
+                          {"º"}
+                        </Typography>
+                      ) : (
+                        <Typography>
+                          {forecastday.date}
 
-                            <img src={forecastday.day.condition.icon} />
+                          <img src={forecastday.day.condition.icon} />
 
-                            {"High: "}
-                            {forecastday.day.maxtemp_f}
-                            {"º"}
+                          {"High: "}
+                          {forecastday.day.maxtemp_f}
+                          {"º"}
 
-                            {"Low: "}
-                            {forecastday.day.mintemp_f}
-                            {"º"}
-                          </Typography>
-                        )}
-                      </Paper>
-                    );
-                  }
-                )}
+                          {"Low: "}
+                          {forecastday.day.mintemp_f}
+                          {"º"}
+                        </Typography>
+                      )}
+                    </Paper>
+                  );
+                })}
 
-                {/*   <Typography style={{ fontSize: "25px" }}>
-                  {moment().format("Do MMMM YYYY")}
-                </Typography>
-                <Typography>{moment().format("dddd LT")}</Typography> 
-                <Paper style={{ padding: "25px", marginTop: "20px" }}>
-                  <Stack
-                    direction="row"
-                    divider={<Divider orientation="vertical" flexItem />}
-                    spacing={2}
-                  >
-                    <Typography>
-                      <OpacityIcon />
-                      Humidity: {weatherForecast.current.humidity}{" "}
-                    </Typography>
-                    <Typography>
-                      <AirIcon />
-                      Wind: {weatherForecast.current.precip_in}{" "}
-                    </Typography>{" "}
-                  </Stack>
-                </Paper>*/}
+                <Paper style={{ width: "50%" }}>
+                  {" "}
+                  <Typography style={{ fontSize: "25px" }}>
+                    {moment().format("Do MMMM YYYY")}
+                  </Typography>
+                  <Typography>{moment().format("dddd LT")}</Typography>
+                  <Paper style={{ padding: "25px", marginTop: "20px" }}>
+                    <Stack
+                      direction="row"
+                      divider={<Divider orientation="vertical" flexItem />}
+                      spacing={2}
+                    >
+                      <Typography>
+                        <OpacityIcon />
+                        Humidity: {weatherForecast.current.humidity}{" "}
+                      </Typography>
+                      <Typography>
+                        <AirIcon />
+                        Wind: {weatherForecast.current.precip_in}{" "}
+                      </Typography>{" "}
+                    </Stack>
+                  </Paper>
+                </Paper>
               </Container>
             </Grid>
 
             <Grid item xs={2}>
-              <Stack direction="row" alignItems="center">
+              <Stack
+                direction="row"
+                alignItems="center"
+                style={{ margin: "20px 0 0 100px" }}
+              >
+                <IconButton onClick={addFavoriteCity}>
+                  <GradeIcon />
+                </IconButton>
                 <Typography>ºC</Typography>
                 <Switch color="default" onClick={toFahrenheit} />
                 <Typography>ºF</Typography>
