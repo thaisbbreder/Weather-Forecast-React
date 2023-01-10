@@ -1,6 +1,7 @@
 import {
   Box,
   Container,
+  createTheme,
   Divider,
   Drawer,
   Grid,
@@ -9,11 +10,11 @@ import {
   Stack,
   Switch,
   TextField,
+  ThemeProvider,
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
-import animationData from "./assets/animation.json";
 import NotesIcon from "@mui/icons-material/Notes";
 import AirIcon from "@mui/icons-material/Air";
 import GradeIcon from "@mui/icons-material/Grade";
@@ -23,8 +24,16 @@ import "bootstrap/dist/css/bootstrap.css";
 import Carousel from "react-bootstrap/Carousel";
 import { CarouselItem } from "react-bootstrap";
 import moment from "moment/moment";
+import "./style.css";
 
-console.log(animationData);
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "Poppins",
+    },
+  },
+});
+
 function App() {
   const [currentPosition, setCurrentPosition] = useState(""); //lat, long
   const [weatherForecast, setWeatherForecast] = useState("");
@@ -115,284 +124,309 @@ function App() {
   }, []);
 
   return (
-    <Grid
-      container
-      direction="row"
-      spacing={1}
-      style={{
-        background: "white",
-        height: "100vh",
-        color: "white",
-      }}
-    >
-      {weatherForecast ? (
-        <Grid
-          container
-          style={{
-            background:
-              weatherForecast.current.feelslike_c > 27
-                ? "linear-gradient(180deg, rgba(173, 114, 45, 0.78) 0%, rgba(122, 82, 5, 0.78) 70.67%)"
-                : "linear-gradient(180deg, rgba(28, 60, 79, 0.78) 0%, rgba(0, 29, 50, 0.78) 97.61%)",
-            color: "white",
-          }}
-        >
-          <>
-            <Grid item xs={2}>
-              {["left"].map((anchor) => (
-                <React.Fragment key={anchor}>
-                  <IconButton onClick={toggleDrawer(anchor, true)}>
-                    <NotesIcon style={{ margin: "20px" }} />
-                  </IconButton>
-                  <Drawer
-                    anchor={anchor}
-                    open={menu[anchor]}
-                    onClose={toggleDrawer(anchor, false)}
-                  >
-                    <Box role="presentation">
-                      <TextField
-                        id="standard-basic"
-                        variant="standard"
-                        value={city}
-                        style={{
-                          width: "80%",
-                          padding: "10px",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setCity(e.target.value)}
-                      />
-                      <IconButton
-                        style={{ marginTop: "10px" }}
-                        onClick={searchCity}
-                      >
-                        <SearchIcon />
-                      </IconButton>
-
-                      {favorite.map((favorite, index) => {
-                        return (
-                          <Paper
-                            key={index}
-                            elevation={4}
-                            style={{
-                              margin: "10px ",
-                              padding: "20px",
-                              backgroundColor: "rgba(255,255,255,0.5)",
-                            }}
-                          >
-                            <Typography> {favorite.nome} </Typography>
-                            <Typography> {favorite.weather} </Typography>
-                          </Paper>
-                        );
-                      })}
-                    </Box>
-                  </Drawer>
-                </React.Fragment>
-              ))}
-            </Grid>
-            <Grid item xs={8}>
-              <Container style={{ padding: "40px", textAlign: "center" }}>
-                <Typography
-                  style={{
-                    fontSize: "25px",
-                  }}
-                >
-                  {weatherForecast.location.name}
-                </Typography>
-
-                {celsius ? (
-                  <Typography style={{ fontSize: "60px" }}>
-                    {weatherForecast.current.temp_c}
-                    {"ºC"}
-                  </Typography>
-                ) : (
-                  <Typography style={{ fontSize: "60px" }}>
-                    {weatherForecast.current.temp_f}
-                    {"ºF"}
-                  </Typography>
-                )}
-
-                {celsius ? (
-                  <Typography>
-                    {weatherForecast.current.condition.text} <br />
-                    Feels like {weatherForecast.current.feelslike_c}
-                    {"º"}
-                  </Typography>
-                ) : (
-                  <Typography>
-                    {weatherForecast.current.condition.text}
-                    <br />
-                    Feels like {weatherForecast.current.feelslike_f}
-                    {"º"}
-                  </Typography>
-                )}
-
-                {celsius ? (
-                  <Typography style={{ fontSize: "13px" }}>
-                    {"High: "}
-                    {weatherForecast.forecast.forecastday[0].day.maxtemp_c}
-                    {"º    "}
-                    {"Low: "}
-                    {weatherForecast.forecast.forecastday[0].day.mintemp_c}
-                    {"º"}
-                  </Typography>
-                ) : (
-                  <Typography style={{ fontSize: "13px" }}>
-                    {"High: "}
-                    {weatherForecast.forecast.forecastday[0].day.maxtemp_f}
-                    {"º    "}
-                    {"Low: "}
-                    {weatherForecast.forecast.forecastday[0].day.mintemp_f}
-                    {"º"}
-                  </Typography>
-                )}
-
-                <Paper
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.5)",
-                    marginTop: "30px",
-                  }}
-                >
-                  <Carousel>
-                    <CarouselItem interval={100000}>
-                      <Stack direction="row">
-                        {weatherForecast.forecast.forecastday[0].hour
-                          .slice(0, 8)
-                          .map((forecasthour) => (
-                            <Box style={{ margin: "10px 0 40px 0 " }}>
-                              <Typography style={{ fontSize: "15px" }}>
-                                {" "}
-                                {forecasthour.time}
-                              </Typography>
-
-                              <img
-                                src={forecasthour.condition.icon}
-                                style={{ width: "30%" }}
-                              />
-                              {celsius ? (
-                                <Typography>
-                                  {forecasthour.temp_c}
-                                  {"º"}
-                                </Typography>
-                              ) : (
-                                <Typography>{forecasthour.temp_f}</Typography>
-                              )}
-                            </Box>
-                          ))}
-                      </Stack>
-                    </CarouselItem>
-                    <CarouselItem interval={1000000}>
-                      <Stack direction="row">
-                        {weatherForecast.forecast.forecastday[0].hour
-                          .slice(8, 16)
-                          .map((forecasthour) => (
-                            <Box style={{ margin: "10px 0 40px 0 " }}>
-                              <Typography style={{ fontSize: "15px" }}>
-                                {" "}
-                                {forecasthour.time}
-                              </Typography>
-
-                              <img
-                                src={forecasthour.condition.icon}
-                                style={{ width: "30%" }}
-                              />
-                              {celsius ? (
-                                <Typography>
-                                  {forecasthour.temp_c}
-                                  {"º"}
-                                </Typography>
-                              ) : (
-                                <Typography>{forecasthour.temp_f}</Typography>
-                              )}
-                            </Box>
-                          ))}
-                      </Stack>
-                    </CarouselItem>
-                    <CarouselItem interval={100000}>
-                      <Stack direction="row">
-                        {weatherForecast.forecast.forecastday[0].hour
-                          .slice(16, 24)
-                          .map((forecasthour) => (
-                            <Box style={{ margin: "10px 0 40px 0 " }}>
-                              <Typography style={{ fontSize: "15px" }}>
-                                {" "}
-                                {forecasthour.time}
-                              </Typography>
-
-                              <img
-                                src={forecasthour.condition.icon}
-                                style={{ width: "30%" }}
-                              />
-                              {celsius ? (
-                                <Typography>
-                                  {forecasthour.temp_c}
-                                  {"º"}
-                                </Typography>
-                              ) : (
-                                <Typography>{forecasthour.temp_f}</Typography>
-                              )}
-                            </Box>
-                          ))}
-                      </Stack>
-                    </CarouselItem>
-                  </Carousel>
-                </Paper>
-
-                {weatherForecast.forecast.forecastday.map((forecastday, id) => {
-                  if (id == 0) return;
-                  return (
-                    <Paper
-                      style={{
-                        //padding: "5px",
-                        width: "50%",
-                        margin: "5px 0",
-                        backgroundColor: "rgba(255,255,255,0.5)",
-                      }}
+    <ThemeProvider theme={theme}>
+      <Grid
+        container
+        direction="row"
+        spacing={1}
+        style={{
+          // background: "white",
+          height: "100vh",
+          color: "white",
+        }}
+      >
+        {weatherForecast ? (
+          <Grid
+            container
+            style={{
+              background:
+                weatherForecast.current.feelslike_c > 27
+                  ? "linear-gradient(180deg, rgba(173, 114, 45, 0.78) 0%, rgba(122, 82, 5, 0.78) 70.67%)"
+                  : "linear-gradient(180deg, rgba(28, 60, 79, 0.78) 0%, rgba(0, 29, 50, 0.78) 97.61%)",
+              color: "white",
+            }}
+          >
+            <>
+              <Grid item xs={2}>
+                {["left"].map((anchor) => (
+                  <React.Fragment key={anchor}>
+                    <IconButton onClick={toggleDrawer(anchor, true)}>
+                      <NotesIcon style={{ margin: "20px" }} />
+                    </IconButton>
+                    <Drawer
+                      anchor={anchor}
+                      open={menu[anchor]}
+                      onClose={toggleDrawer(anchor, false)}
                     >
-                      {celsius ? (
-                        <Typography>
-                          {forecastday.date}
+                      <Paper
+                        role="presentation"
+                        style={{
+                          backgroundColor: "rgba(255,255,255,0.5)", //não ta funcionando
+                          height: "982px",
+                          width: "360px",
+                        }}
+                      >
+                        <TextField
+                          id="standard-basic"
+                          variant="standard"
+                          value={city}
+                          style={{
+                            width: "80%",
+                            padding: "10px",
+                            marginBottom: "20px",
+                          }}
+                          onChange={(e) => setCity(e.target.value)}
+                        />
+                        <IconButton
+                          style={{ marginTop: "10px" }}
+                          onClick={searchCity}
+                        >
+                          <SearchIcon />
+                        </IconButton>
 
-                          <img
-                            src={forecastday.day.condition.icon}
-                            style={{
-                              //padding: "5px",
-                              maxWidth: "40px",
-                            }}
-                          />
-
-                          {"High: "}
-                          {forecastday.day.maxtemp_c}
-                          {"º"}
-
-                          {"Low: "}
-                          {forecastday.day.mintemp_c}
-                          {"º"}
-                        </Typography>
-                      ) : (
-                        <Typography>
-                          {forecastday.date}
-
-                          <img src={forecastday.day.condition.icon} />
-
-                          {"High: "}
-                          {forecastday.day.maxtemp_f}
-                          {"º"}
-
-                          {"Low: "}
-                          {forecastday.day.mintemp_f}
-                          {"º"}
-                        </Typography>
-                      )}
-                    </Paper>
-                  );
-                })}
-
-                <Paper style={{ width: "50%" }}>
-                  {" "}
-                  <Typography style={{ fontSize: "25px" }}>
-                    {moment().format("Do MMMM YYYY")}
+                        {favorite.map((favorite, index) => {
+                          return (
+                            <Paper
+                              key={index}
+                              elevation={2}
+                              style={{
+                                /* margin: "10px ",
+                              padding: "20px", */
+                                backgroundColor: "rgba(255,255,255,0.5)",
+                                height: "132.75px",
+                                width: "333px",
+                                left: "0px",
+                                top: "0px",
+                                borderRadius: " 0px",
+                              }}
+                            >
+                              <Typography> {favorite.nome} </Typography>
+                              <Typography> {favorite.weather} </Typography>
+                            </Paper>
+                          );
+                        })}
+                      </Paper>
+                    </Drawer>
+                  </React.Fragment>
+                ))}
+              </Grid>
+              <Grid item xs={8}>
+                <Container style={{ padding: "40px", textAlign: "center" }}>
+                  <Typography
+                    style={{
+                      fontSize: "25px",
+                    }}
+                  >
+                    {weatherForecast.location.name}
                   </Typography>
-                  <Typography>{moment().format("dddd LT")}</Typography>
-                  <Paper style={{ padding: "25px", marginTop: "20px" }}>
+
+                  {celsius ? (
+                    <Typography style={{ fontSize: "60px" }}>
+                      {weatherForecast.current.temp_c}
+                      {"ºC"}
+                    </Typography>
+                  ) : (
+                    <Typography style={{ fontSize: "60px" }}>
+                      {weatherForecast.current.temp_f}
+                      {"ºF"}
+                    </Typography>
+                  )}
+
+                  {celsius ? (
+                    <Typography>
+                      {weatherForecast.current.condition.text} <br />
+                      Feels like {weatherForecast.current.feelslike_c}
+                      {"º"}
+                    </Typography>
+                  ) : (
+                    <Typography>
+                      {weatherForecast.current.condition.text}
+                      <br />
+                      Feels like {weatherForecast.current.feelslike_f}
+                      {"º"}
+                    </Typography>
+                  )}
+
+                  {celsius ? (
+                    <Typography style={{ fontSize: "13px" }}>
+                      {"High: "}
+                      {weatherForecast.forecast.forecastday[0].day.maxtemp_c}
+                      {"º    "}
+                      {"Low: "}
+                      {weatherForecast.forecast.forecastday[0].day.mintemp_c}
+                      {"º"}
+                    </Typography>
+                  ) : (
+                    <Typography style={{ fontSize: "13px" }}>
+                      {"High: "}
+                      {weatherForecast.forecast.forecastday[0].day.maxtemp_f}
+                      {"º    "}
+                      {"Low: "}
+                      {weatherForecast.forecast.forecastday[0].day.mintemp_f}
+                      {"º"}
+                    </Typography>
+                  )}
+
+                  <Paper
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.5)",
+                      marginTop: "15px",
+                      borderRadius: "14px",
+                    }}
+                  >
+                    <Carousel>
+                      <CarouselItem interval={100000}>
+                        <Stack direction="row">
+                          {weatherForecast.forecast.forecastday[0].hour
+                            .slice(0, 8)
+                            .map((forecasthour) => (
+                              <Box style={{ margin: "10px 0 40px 0 " }}>
+                                <Typography style={{ fontSize: "15px" }}>
+                                  {" "}
+                                  {forecasthour.time}
+                                </Typography>
+
+                                <img
+                                  src={forecasthour.condition.icon}
+                                  style={{ width: "30%" }}
+                                />
+                                {celsius ? (
+                                  <Typography>
+                                    {forecasthour.temp_c}
+                                    {"º"}
+                                  </Typography>
+                                ) : (
+                                  <Typography>{forecasthour.temp_f}</Typography>
+                                )}
+                              </Box>
+                            ))}
+                        </Stack>
+                      </CarouselItem>
+                      <CarouselItem interval={1000000}>
+                        <Stack direction="row">
+                          {weatherForecast.forecast.forecastday[0].hour
+                            .slice(8, 16)
+                            .map((forecasthour) => (
+                              <Box style={{ margin: "10px 0 40px 0 " }}>
+                                <Typography style={{ fontSize: "15px" }}>
+                                  {" "}
+                                  {forecasthour.time}
+                                </Typography>
+
+                                <img
+                                  src={forecasthour.condition.icon}
+                                  style={{ width: "30%" }}
+                                />
+                                {celsius ? (
+                                  <Typography>
+                                    {forecasthour.temp_c}
+                                    {"º"}
+                                  </Typography>
+                                ) : (
+                                  <Typography>{forecasthour.temp_f}</Typography>
+                                )}
+                              </Box>
+                            ))}
+                        </Stack>
+                      </CarouselItem>
+                      <CarouselItem interval={100000}>
+                        <Stack direction="row">
+                          {weatherForecast.forecast.forecastday[0].hour
+                            .slice(16, 24)
+                            .map((forecasthour) => (
+                              <Box style={{ margin: "10px 0 40px 0 " }}>
+                                <Typography style={{ fontSize: "15px" }}>
+                                  {" "}
+                                  {forecasthour.time}
+                                </Typography>
+
+                                <img
+                                  src={forecasthour.condition.icon}
+                                  style={{ width: "30%" }}
+                                />
+                                {celsius ? (
+                                  <Typography>
+                                    {forecasthour.temp_c}
+                                    {"º"}
+                                  </Typography>
+                                ) : (
+                                  <Typography>{forecasthour.temp_f}</Typography>
+                                )}
+                              </Box>
+                            ))}
+                        </Stack>
+                      </CarouselItem>
+                    </Carousel>
+                  </Paper>
+
+                  {weatherForecast.forecast.forecastday.map(
+                    (forecastday, id) => {
+                      if (id == 0) return;
+                      return (
+                        <Paper
+                          style={{
+                            //padding: "5px",
+                            width: "50%",
+                            margin: "5px 0",
+                            backgroundColor: "rgba(255,255,255,0.5)",
+                          }}
+                        >
+                          {celsius ? (
+                            <Typography>
+                              {forecastday.date}
+
+                              <img
+                                src={forecastday.day.condition.icon}
+                                style={{
+                                  //padding: "5px",
+                                  maxWidth: "40px",
+                                }}
+                              />
+
+                              {"High: "}
+                              {forecastday.day.maxtemp_c}
+                              {"º"}
+
+                              {"Low: "}
+                              {forecastday.day.mintemp_c}
+                              {"º"}
+                            </Typography>
+                          ) : (
+                            <Typography>
+                              {forecastday.date}
+
+                              <img src={forecastday.day.condition.icon} />
+
+                              {"High: "}
+                              {forecastday.day.maxtemp_f}
+                              {"º"}
+
+                              {"Low: "}
+                              {forecastday.day.mintemp_f}
+                              {"º"}
+                            </Typography>
+                          )}
+                        </Paper>
+                      );
+                    }
+                  )}
+
+                  <Paper
+                    style={{
+                      height: "412px",
+                      width: "529px",
+                      left: "533px",
+                      top: "499px",
+                      borderRadius: "15px",
+
+                      backgroundColor: "rgba(255,255,255,0.5)",
+                    }}
+                  >
+                    {" "}
+                    <Typography style={{ fontSize: "25px" }}>
+                      {moment().format("Do MMMM YYYY")}
+                    </Typography>
+                    <Typography>{moment().format("dddd LT")}</Typography>
                     <Stack
                       direction="row"
                       divider={<Divider orientation="vertical" flexItem />}
@@ -408,42 +442,42 @@ function App() {
                       </Typography>{" "}
                     </Stack>
                   </Paper>
-                </Paper>
-              </Container>
-            </Grid>
+                </Container>
+              </Grid>
 
-            <Grid item xs={2}>
-              <Stack
-                direction="row"
-                alignItems="center"
-                style={{ margin: "20px 0 0 100px" }}
-              >
-                <IconButton onClick={addFavoriteCity}>
-                  <GradeIcon />
-                </IconButton>
-                <Typography>ºC</Typography>
-                <Switch color="default" onClick={toFahrenheit} />
-                <Typography>ºF</Typography>
-              </Stack>
-            </Grid>
-          </>
-        </Grid>
-      ) : (
-        <Grid style={{ margin: "auto" }}>
-          <Typography> Colocar uma animação aqui </Typography>
-          <TextField
-            id="standard-basic"
-            variant="outlined"
-            placeholder="Search for city"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          />
-          <IconButton onClick={searchCity}>
-            <SearchIcon />
-          </IconButton>
-        </Grid>
-      )}
-    </Grid>
+              <Grid item xs={2}>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  style={{ margin: "20px 0 0 100px" }}
+                >
+                  <IconButton onClick={addFavoriteCity}>
+                    <GradeIcon />
+                  </IconButton>
+                  <Typography>ºC</Typography>
+                  <Switch color="default" onClick={toFahrenheit} />
+                  <Typography>ºF</Typography>
+                </Stack>
+              </Grid>
+            </>
+          </Grid>
+        ) : (
+          <Grid style={{ margin: "auto" }}>
+            <Typography> Colocar uma animação aqui </Typography>
+            <TextField
+              id="standard-basic"
+              variant="outlined"
+              placeholder="Search for city"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <IconButton onClick={searchCity}>
+              <SearchIcon />
+            </IconButton>
+          </Grid>
+        )}
+      </Grid>
+    </ThemeProvider>
   );
 }
 
