@@ -19,12 +19,13 @@ import NotesIcon from "@mui/icons-material/Notes";
 import AirIcon from "@mui/icons-material/Air";
 import GradeIcon from "@mui/icons-material/Grade";
 import OpacityIcon from "@mui/icons-material/Opacity";
+import ClearIcon from "@mui/icons-material/Clear";
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Carousel from "react-bootstrap/Carousel";
 import { CarouselItem } from "react-bootstrap";
 import moment from "moment/moment";
-import "./style.css";
+import { Clear } from "@mui/icons-material";
 
 const theme = createTheme({
   typography: {
@@ -68,7 +69,7 @@ function App() {
   };
   const searchCity = () => {
     fetch(
-      `http://api.weatherapi.com/v1/forecast.json?key=a34f75ae0cb04332924154023230301&q=${city}&days=7&lang=en`
+      `http://api.weatherapi.com/v1/forecast.json?key=a34f75ae0cb04332924154023230301&q=${city}&days=7&aqi=yes&alerts=yes`
     )
       .then((response) => {
         if (response.status == 200) {
@@ -103,9 +104,16 @@ function App() {
       id: favorite.length + 1,
       nome: weatherForecast.location.name,
       weather: weatherForecast.current.temp_c,
+      condition: weatherForecast.current.condition.text,
     };
     favoriteList.push(addCity);
     setFavorite(favoriteList);
+  };
+
+  const deleteFavoriteCity = (id) => {
+    const newFavoriteList = favorite.filter((city) => city.id !== id);
+    setFavorite(newFavoriteList);
+    console.log(id);
   };
 
   useEffect(() => {
@@ -190,18 +198,42 @@ function App() {
                               key={index}
                               elevation={2}
                               style={{
-                                /* margin: "10px ",
-                              padding: "20px", */
+                                margin: "10px ",
                                 backgroundColor: "rgba(255,255,255,0.5)",
                                 height: "132.75px",
                                 width: "333px",
-                                left: "0px",
-                                top: "0px",
-                                borderRadius: " 0px",
                               }}
                             >
-                              <Typography> {favorite.nome} </Typography>
-                              <Typography> {favorite.weather} </Typography>
+                              {" "}
+                              <Typography style={{ textAlign: "end" }}>
+                                <IconButton
+                                  onClick={() =>
+                                    deleteFavoriteCity(favorite.id)
+                                  }
+                                >
+                                  <Clear color="disabled" fontSize="small" />
+                                </IconButton>
+                              </Typography>
+                              <Typography
+                                style={{ margin: "0 25px", fontSize: "20px" }}
+                              >
+                                {favorite.nome}
+                              </Typography>
+                              <Typography
+                                style={{ margin: "0 25px", fontSize: "15px" }}
+                              >
+                                {favorite.condition}
+                              </Typography>
+                              <Typography
+                                style={{
+                                  margin: "0 25px",
+                                  fontSize: "30px",
+                                  textAlign: "end",
+                                }}
+                              >
+                                {" "}
+                                {favorite.weather} {" ºC"}
+                              </Typography>
                             </Paper>
                           );
                         })}
@@ -223,7 +255,7 @@ function App() {
                   {celsius ? (
                     <Typography style={{ fontSize: "60px" }}>
                       {weatherForecast.current.temp_c}
-                      {"ºC"}
+                      {" ºC"}
                     </Typography>
                   ) : (
                     <Typography style={{ fontSize: "60px" }}>
