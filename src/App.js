@@ -26,6 +26,7 @@ import Carousel from "react-bootstrap/Carousel";
 import { CarouselItem } from "react-bootstrap";
 import moment from "moment/moment";
 import { Clear } from "@mui/icons-material";
+import axios from "axios";
 
 const theme = createTheme({
   typography: {
@@ -36,9 +37,9 @@ const theme = createTheme({
 });
 
 function App() {
-  const [currentPosition, setCurrentPosition] = useState(""); //lat, long
-  const [weatherForecast, setWeatherForecast] = useState("");
-  const [city, setCity] = useState("");
+  const [currentPosition, setCurrentPosition] = useState(""); 
+  const [weatherForecast, setWeatherForecast] = useState(""); 
+  const [city, setCity] = useState(""); 
   const [celsius, setCelsius] = useState(true);
   const [menu, setMenu] = useState(false);
   const [favorite, setFavorite] = useState([]);
@@ -53,34 +54,25 @@ function App() {
     searchCurrentPosition();
   }, [currentPosition]);
 
-  const searchCurrentPosition = () => {
-    fetch(
-      `http://api.weatherapi.com/v1/forecast.json?key=a34f75ae0cb04332924154023230301&q=${currentPosition}&days=7&lang=en`
-    )
+  const searchCity = () => {
+    axios
+      .get(
+        `http://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_API_KEY}&q=${city}&days=7&lang=en`
+      )
       .then((response) => {
-        if (response.status == 200) {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        setWeatherForecast(data);
+        setWeatherForecast(response.data);
+        console.log(response.data);
       });
   };
-  const searchCity = () => {
-    fetch(
-      `http://api.weatherapi.com/v1/forecast.json?key=a34f75ae0cb04332924154023230301&q=${city}&days=7&aqi=yes&alerts=yes`
-    )
+  const searchCurrentPosition = () => {
+    axios
+      .get(
+        `http://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_API_KEY}&q=${currentPosition}&days=7&lang=en`
+      )
       .then((response) => {
-        if (response.status == 200) {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        setWeatherForecast(data);
+        setWeatherForecast(response.data);
+        console.log(response.data);
       });
-    setCity("");
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -113,7 +105,6 @@ function App() {
   const deleteFavoriteCity = (id) => {
     const newFavoriteList = favorite.filter((city) => city.id !== id);
     setFavorite(newFavoriteList);
-    console.log(id);
   };
 
   useEffect(() => {
@@ -200,7 +191,7 @@ function App() {
                               style={{
                                 margin: "10px ",
                                 backgroundColor: "rgba(255,255,255,0.5)",
-                                height: "132.75px",
+                                height: "140px",
                                 width: "333px",
                               }}
                             >
@@ -220,7 +211,11 @@ function App() {
                                 {favorite.nome}
                               </Typography>
                               <Typography
-                                style={{ margin: "0 25px", fontSize: "15px" }}
+                                style={{
+                                  margin: "0 25px",
+
+                                  fontSize: "15px",
+                                }}
                               >
                                 {favorite.condition}
                               </Typography>
