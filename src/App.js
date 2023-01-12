@@ -1,6 +1,5 @@
 import {
   Box,
-  Container,
   createTheme,
   Divider,
   Drawer,
@@ -9,6 +8,7 @@ import {
   Paper,
   Stack,
   Switch,
+  Tabs,
   TextField,
   ThemeProvider,
   Typography,
@@ -16,16 +16,19 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import NotesIcon from "@mui/icons-material/Notes";
-import AirIcon from "@mui/icons-material/Air";
 import GradeIcon from "@mui/icons-material/Grade";
 import OpacityIcon from "@mui/icons-material/Opacity";
-import ClearIcon from "@mui/icons-material/Clear";
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import Carousel from "react-bootstrap/Carousel";
-import { CarouselItem } from "react-bootstrap";
-import moment from "moment/moment";
-import { Clear } from "@mui/icons-material";
+import {
+  AirOutlined,
+  Clear,
+  LensOutlined,
+  NightlightRoundOutlined,
+  Thunderstorm,
+  WbSunnyOutlined,
+  WbTwilight,
+} from "@mui/icons-material";
 import axios from "axios";
 
 const theme = createTheme({
@@ -37,9 +40,9 @@ const theme = createTheme({
 });
 
 function App() {
-  const [currentPosition, setCurrentPosition] = useState(""); 
-  const [weatherForecast, setWeatherForecast] = useState(""); 
-  const [city, setCity] = useState(""); 
+  const [currentPosition, setCurrentPosition] = useState("");
+  const [weatherForecast, setWeatherForecast] = useState("");
+  const [city, setCity] = useState("");
   const [celsius, setCelsius] = useState(true);
   const [menu, setMenu] = useState(false);
   const [favorite, setFavorite] = useState([]);
@@ -137,6 +140,7 @@ function App() {
         {weatherForecast ? (
           <Grid
             container
+            spacing={1}
             style={{
               background:
                 weatherForecast.current.feelslike_c > 27
@@ -158,9 +162,7 @@ function App() {
                       onClose={toggleDrawer(anchor, false)}
                     >
                       <Paper
-                        role="presentation"
                         style={{
-                          backgroundColor: "rgba(255,255,255,0.5)", //não ta funcionando
                           height: "982px",
                           width: "360px",
                         }}
@@ -237,239 +239,105 @@ function App() {
                   </React.Fragment>
                 ))}
               </Grid>
-              <Grid item xs={8}>
-                <Container style={{ padding: "40px", textAlign: "center" }}>
-                  <Typography
-                    style={{
-                      fontSize: "25px",
-                    }}
-                  >
-                    {weatherForecast.location.name}
-                  </Typography>
+
+              <Grid
+                item
+                xs={8}
+                style={{ textAlign: "center", marginTop: "30px" }}
+              >
+                <Typography
+                  style={{
+                    fontSize: "25px",
+                  }}
+                >
+                  {weatherForecast.location.name}
+                </Typography>
+
+                <Typography style={{ fontSize: "15px" }}>
+                  {weatherForecast.current.condition.text}
 
                   {celsius ? (
-                    <Typography style={{ fontSize: "60px" }}>
-                      {weatherForecast.current.temp_c}
-                      {" ºC"}
-                    </Typography>
-                  ) : (
-                    <Typography style={{ fontSize: "60px" }}>
-                      {weatherForecast.current.temp_f}
-                      {"ºF"}
-                    </Typography>
-                  )}
-
-                  {celsius ? (
-                    <Typography>
-                      {weatherForecast.current.condition.text} <br />
-                      Feels like {weatherForecast.current.feelslike_c}
-                      {"º"}
-                    </Typography>
-                  ) : (
-                    <Typography>
-                      {weatherForecast.current.condition.text}
-                      <br />
-                      Feels like {weatherForecast.current.feelslike_f}
-                      {"º"}
-                    </Typography>
-                  )}
-
-                  {celsius ? (
-                    <Typography style={{ fontSize: "13px" }}>
-                      {"High: "}
-                      {weatherForecast.forecast.forecastday[0].day.maxtemp_c}
-                      {"º    "}
-                      {"Low: "}
-                      {weatherForecast.forecast.forecastday[0].day.mintemp_c}
-                      {"º"}
-                    </Typography>
-                  ) : (
-                    <Typography style={{ fontSize: "13px" }}>
-                      {"High: "}
-                      {weatherForecast.forecast.forecastday[0].day.maxtemp_f}
-                      {"º    "}
-                      {"Low: "}
-                      {weatherForecast.forecast.forecastday[0].day.mintemp_f}
-                      {"º"}
-                    </Typography>
-                  )}
-
-                  <Paper
-                    style={{
-                      backgroundColor: "rgba(255,255,255,0.5)",
-                      marginTop: "15px",
-                      borderRadius: "14px",
-                    }}
-                  >
-                    <Carousel>
-                      <CarouselItem interval={100000}>
-                        <Stack direction="row">
-                          {weatherForecast.forecast.forecastday[0].hour
-                            .slice(0, 8)
-                            .map((forecasthour) => (
-                              <Box style={{ margin: "10px 0 40px 0 " }}>
-                                <Typography style={{ fontSize: "15px" }}>
-                                  {" "}
-                                  {forecasthour.time}
-                                </Typography>
-
-                                <img
-                                  src={forecasthour.condition.icon}
-                                  style={{ width: "30%" }}
-                                />
-                                {celsius ? (
-                                  <Typography>
-                                    {forecasthour.temp_c}
-                                    {"º"}
-                                  </Typography>
-                                ) : (
-                                  <Typography>{forecasthour.temp_f}</Typography>
-                                )}
-                              </Box>
-                            ))}
-                        </Stack>
-                      </CarouselItem>
-                      <CarouselItem interval={1000000}>
-                        <Stack direction="row">
-                          {weatherForecast.forecast.forecastday[0].hour
-                            .slice(8, 16)
-                            .map((forecasthour) => (
-                              <Box style={{ margin: "10px 0 40px 0 " }}>
-                                <Typography style={{ fontSize: "15px" }}>
-                                  {" "}
-                                  {forecasthour.time}
-                                </Typography>
-
-                                <img
-                                  src={forecasthour.condition.icon}
-                                  style={{ width: "30%" }}
-                                />
-                                {celsius ? (
-                                  <Typography>
-                                    {forecasthour.temp_c}
-                                    {"º"}
-                                  </Typography>
-                                ) : (
-                                  <Typography>{forecasthour.temp_f}</Typography>
-                                )}
-                              </Box>
-                            ))}
-                        </Stack>
-                      </CarouselItem>
-                      <CarouselItem interval={100000}>
-                        <Stack direction="row">
-                          {weatherForecast.forecast.forecastday[0].hour
-                            .slice(16, 24)
-                            .map((forecasthour) => (
-                              <Box style={{ margin: "10px 0 40px 0 " }}>
-                                <Typography style={{ fontSize: "15px" }}>
-                                  {" "}
-                                  {forecasthour.time}
-                                </Typography>
-
-                                <img
-                                  src={forecasthour.condition.icon}
-                                  style={{ width: "30%" }}
-                                />
-                                {celsius ? (
-                                  <Typography>
-                                    {forecasthour.temp_c}
-                                    {"º"}
-                                  </Typography>
-                                ) : (
-                                  <Typography>{forecasthour.temp_f}</Typography>
-                                )}
-                              </Box>
-                            ))}
-                        </Stack>
-                      </CarouselItem>
-                    </Carousel>
-                  </Paper>
-
-                  {weatherForecast.forecast.forecastday.map(
-                    (forecastday, id) => {
-                      if (id == 0) return;
-                      return (
-                        <Paper
-                          style={{
-                            //padding: "5px",
-                            width: "50%",
-                            margin: "5px 0",
-                            backgroundColor: "rgba(255,255,255,0.5)",
-                          }}
-                        >
-                          {celsius ? (
-                            <Typography>
-                              {forecastday.date}
-
-                              <img
-                                src={forecastday.day.condition.icon}
-                                style={{
-                                  //padding: "5px",
-                                  maxWidth: "40px",
-                                }}
-                              />
-
-                              {"High: "}
-                              {forecastday.day.maxtemp_c}
-                              {"º"}
-
-                              {"Low: "}
-                              {forecastday.day.mintemp_c}
-                              {"º"}
-                            </Typography>
-                          ) : (
-                            <Typography>
-                              {forecastday.date}
-
-                              <img src={forecastday.day.condition.icon} />
-
-                              {"High: "}
-                              {forecastday.day.maxtemp_f}
-                              {"º"}
-
-                              {"Low: "}
-                              {forecastday.day.mintemp_f}
-                              {"º"}
-                            </Typography>
-                          )}
-                        </Paper>
-                      );
-                    }
-                  )}
-
-                  <Paper
-                    style={{
-                      height: "412px",
-                      width: "529px",
-                      left: "533px",
-                      top: "499px",
-                      borderRadius: "15px",
-
-                      backgroundColor: "rgba(255,255,255,0.5)",
-                    }}
-                  >
-                    {" "}
-                    <Typography style={{ fontSize: "25px" }}>
-                      {moment().format("Do MMMM YYYY")}
-                    </Typography>
-                    <Typography>{moment().format("dddd LT")}</Typography>
-                    <Stack
-                      direction="row"
-                      divider={<Divider orientation="vertical" flexItem />}
-                      spacing={2}
-                    >
+                    <>
                       <Typography>
-                        <OpacityIcon />
-                        Humidity: {weatherForecast.current.humidity}{" "}
+                        {"Feelslike: "} {weatherForecast.current.feelslike_c}
+                        <br />
+                        {"High: "}
+                        {weatherForecast.forecast.forecastday[0].day.maxtemp_c}
+                        {"º    "}
+                        {"Low: "}
+                        {weatherForecast.forecast.forecastday[0].day.mintemp_c}
+                        {"º"}
                       </Typography>
+                    </>
+                  ) : (
+                    <>
                       <Typography>
-                        <AirIcon />
-                        Wind: {weatherForecast.current.precip_in}{" "}
-                      </Typography>{" "}
-                    </Stack>
-                  </Paper>
-                </Container>
+                        {"Feelslike: "} {weatherForecast.current.feelslike_f}{" "}
+                        <br />
+                        {"High: "}
+                        {weatherForecast.forecast.forecastday[0].day.maxtemp_f}
+                        {"º    "}
+                        {"Low: "}
+                        {weatherForecast.forecast.forecastday[0].day.mintemp_f}
+                        {"º"}
+                      </Typography>
+                    </>
+                  )}
+                </Typography>
+                <Paper
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.5)",
+                    borderRadius: "14px",
+                    padding: "15px",
+                    overflow: "auto",
+                  }}
+                >
+                  <Stack
+                    divider={<Divider orientation="vertical" flexItem />}
+                    direction="row"
+                    justifyContent="space-around"
+                    alignItems="center"
+                    spacing={1}
+                    padding={1}
+                  >
+                    <Typography>
+                      <OpacityIcon fontSize="small" />
+                      Humidity: {weatherForecast.current.humidity}
+                      {"% "}
+                      <br />
+                      <Thunderstorm fontSize="small" />
+                      Preciptation: {weatherForecast.current.precip_mm}
+                      {"mm"}
+                    </Typography>
+                    <Typography>
+                      <AirOutlined fontSize="small" />
+                      Wind: {weatherForecast.current.wind_kph}
+                      {"km/h "} {weatherForecast.current.wind_dir} <br />
+                    </Typography>
+
+                    <Typography>
+                      <WbSunnyOutlined fontSize="small" />
+                      Sunrise:{" "}
+                      {weatherForecast.forecast.forecastday[0].astro.sunrise}
+                      <br />
+                      <WbTwilight fontSize="small" />
+                      Sunset:{" "}
+                      {weatherForecast.forecast.forecastday[0].astro.sunset}
+                    </Typography>
+                    <Typography>
+                      <NightlightRoundOutlined fontSize="small" />
+                      Moon ilumination:{" "}
+                      {
+                        weatherForecast.forecast.forecastday[0].astro
+                          .moon_illumination
+                      }
+                      <br />
+                      <LensOutlined fontSize="small" />
+                      Moon phase:{" "}
+                      {weatherForecast.forecast.forecastday[0].astro.moon_phase}
+                    </Typography>
+                  </Stack>
+                </Paper>
               </Grid>
 
               <Grid item xs={2}>
@@ -487,6 +355,104 @@ function App() {
                 </Stack>
               </Grid>
             </>
+            <Grid item xs={2}>
+              }{/* meu git e linkedin */}
+            </Grid>
+            <Grid item xs={4}>
+              <Tabs
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+                orientation="vertical"
+                style={{ maxHeight: "400px" }}
+              >
+                {weatherForecast.forecast.forecastday[0].hour.map(
+                  (forecastday, hour) => {
+                    if (hour >= 0)
+                      return (
+                        <>
+                          <Box style={{ width: "50%" }}>
+                            <Typography
+                              style={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {forecastday.time}{" "}
+                            </Typography>
+                          </Box>
+                          <Paper
+                            style={{
+                              margin: "2px",
+                              backgroundColor: "rgba(255,255,255,0.5)",
+                              justifyContent: "space-around",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Typography>
+                              <img
+                                src={forecastday.condition.icon}
+                                width={30}
+                              />{" "}
+                              {forecastday.condition.text}
+                              {forecastday.temp_c}
+                              {"ºC "}
+                            </Typography>
+                          </Paper>
+                        </>
+                      );
+                  }
+                )}
+              </Tabs>
+            </Grid>
+            <Grid item xs={4}>
+              {weatherForecast.forecast.forecastday.map((forecastday, id) => {
+                if (id == 0) return;
+                return (
+                  <Paper
+                    style={{
+                      width: "50%",
+                      margin: "5px 0",
+                      backgroundColor: "rgba(255,255,255,0.5)",
+                    }}
+                  >
+                    {celsius ? (
+                      <Typography>
+                        {forecastday.date}
+
+                        <img
+                          src={forecastday.day.condition.icon}
+                          style={{
+                            maxWidth: "40px",
+                          }}
+                        />
+
+                        {"High: "}
+                        {forecastday.day.maxtemp_c}
+                        {"º"}
+
+                        {"Low: "}
+                        {forecastday.day.mintemp_c}
+                        {"º"}
+                      </Typography>
+                    ) : (
+                      <Typography>
+                        {forecastday.date}
+
+                        <img src={forecastday.day.condition.icon} />
+
+                        {"High: "}
+                        {forecastday.day.maxtemp_f}
+                        {"º"}
+
+                        {"Low: "}
+                        {forecastday.day.mintemp_f}
+                        {"º"}
+                      </Typography>
+                    )}
+                  </Paper>
+                );
+              })}
+            </Grid>
           </Grid>
         ) : (
           <Grid style={{ margin: "auto" }}>
