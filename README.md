@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+<h1 align="center"> Previsão do tempo </h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![home](https://user-images.githubusercontent.com/99916975/216715329-fc8ce638-0303-4ee9-b095-c8f0ef8a2915.png)
 
-## Available Scripts
+![background1](https://user-images.githubusercontent.com/99916975/216689965-952714b8-4ebb-44fa-86b1-204956539eac.png)
 
-In the project directory, you can run:
+![background2](https://user-images.githubusercontent.com/99916975/216715341-7b574912-2b50-4490-b0bf-fa44a21a4f72.png)
 
-### `npm start`
+#  Índice 
+  
+  [Índice](#índice) | [Sobre o Projeto](#sobre-o-projeto) | [Tecnologias](#tecnologias)  | [Resultados](#resultado) | [Contato](#contato)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Sobre o projeto 
+ 🔎 O projeto de consulta da previsão do tempo foi desenvolvido para práticar meus conhecimento com requisições de API e react-hooks.
+ 
+  [Visite o site](https://weather-forecast-react-thaisbbreder.vercel.app/)
+   
+ # Tecnologias  
+ ✔️ ReactJs
+ 
+ ✔️ Navigator geolocation
+ 
+ ✔️ Axios
+ 
+ ✔️ Material UI
+ 
+ ✔️ <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>
+ 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Resultado 
+🚀  O resultado foi um site com interface intuitiva no qual basta o usuário permitir o compartilhamento da sua localização para que seja retornado os dados meterológicos em tempo real. Caso contrário, o usuário ainda pode optar por realizar a busca manual pelo nome de qualquer cidade do mundo. 
+ 
+ O site conta com a funcionalidade de favoritar cidades, de converter a temperatura de celsius/fahrehein e altera o background de acordo com a sensação térmica.
+ 
+ O projeto foi planejado no figma, possui layout responsivo e componentes reutilizáveis. 
+ 
+ ![Vídeo sem título ‐ Feito com o Clipchamp (1) (1)](https://user-images.githubusercontent.com/99916975/216718323-ee7a1725-d166-4e90-a371-11af2beae8b4.gif)
 
-### `npm test`
+# Contato  
+🤝  [Linkedin](https://www.linkedin.com/in/thaisbbreder/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Feito com ❤️ por Thaís Braga Breder
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
