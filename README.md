@@ -32,7 +32,7 @@
  
  O site conta com a funcionalidade de favoritar cidades, de converter a temperatura de celsius/fahrehein e altera o background de acordo com a sensação térmica.
  
- O projeto foi planejado no figma, possui layout responsivo e componentes reutilizáveis. 
+ O projeto foi planejado no figma e componentes reutilizáveis. 
  
  ![Vídeo sem título ‐ Feito com o Clipchamp (1) (1)](https://user-images.githubusercontent.com/99916975/216718323-ee7a1725-d166-4e90-a371-11af2beae8b4.gif)
 
