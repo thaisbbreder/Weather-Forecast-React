@@ -100,7 +100,7 @@ function App() {
 
     axios
       .get(
-        `https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_API_KEY}&q=${city}&days=7&lang=en`
+        `https://api.weatherapi.com/v1/forecast.json?key=a6135ba5564d49bd8dc31329231101&q=${city}&days=7&lang=en`
       )
       .then((response) => {
         setWeatherForecast(response.data);

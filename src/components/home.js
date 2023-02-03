@@ -44,7 +44,7 @@ function Home(props) {
           p: "5px 4px",
           display: "flex",
           alignItems: "center",
-          width: 400,
+          width: 300,
           margin: "auto",
         }}
       >
@@ -52,7 +52,6 @@ function Home(props) {
           id="standard-basic"
           label="Search location"
           variant="outlined"
-          fullWidth
           value={currentPosition}
           onChange={(e) => setCurrentPosition(e.target.value)}
         />
@@ -73,7 +72,6 @@ function Home(props) {
         <IconButton
           type="button"
           aria-label="search"
-          onClick={searchCity}
           sx={{ color: "white", marginTop: "50px" }}
         >
           <GitHubIcon />
@@ -84,7 +82,6 @@ function Home(props) {
           type="button"
           sx={{ p: "10px", color: "white", marginTop: "50px" }}
           aria-label="search"
-          onClick={searchCity}
         >
           <LinkedIn />
         </IconButton>
