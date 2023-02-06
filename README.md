@@ -39,7 +39,7 @@
 
 Feito com ❤️ por Thaís Braga Breder
 
-
-![JAVASCRIPT  REACT (3)](https://user-images.githubusercontent.com/99916975/216992356-1479f81b-1d21-413f-a31a-cc18da5bad1c.png)
+ 
+![final pro](https://user-images.githubusercontent.com/99916975/216993087-532d4919-3b6b-4939-9333-b220a97b59bb.png)
 
 
