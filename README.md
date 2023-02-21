@@ -28,9 +28,9 @@
  
 
 # Resultado 
-🚀  O resultado foi um site com interface intuitiva no qual basta o usuário permitir o compartilhamento da sua localização para que seja retornado os dados meterológicos em tempo real. Caso contrário, o usuário ainda pode optar por realizar a busca manual pelo nome de qualquer cidade do mundo. 
- 
- O site conta com a funcionalidade de favoritar cidades, de converter a temperatura de celsius/fahrehein e altera o background de acordo com a sensação térmica.
+🚀  O resultado foi um site com interface intuitiva no qual basta o usuário permitir o compartilhamento da sua localização para que seja retornado os dados meteorológicos em tempo real. Caso contrário, o usuário ainda pode optar por realizar a busca manual pelo nome de qualquer cidade do mundo. 
+
+O site conta com a funcionalidade de favoritar cidades, de converter a temperatura de celsius/fahrenheit e alterar o background de acordo com a sensação térmica.
  
  ![Vídeo sem título ‐ Feito com o Clipchamp (1) (1)](https://user-images.githubusercontent.com/99916975/216718323-ee7a1725-d166-4e90-a371-11af2beae8b4.gif)
 
